@@ -1,9 +1,8 @@
-
-import 'package:FlutterGalleryApp/string_util.dart';
+import '../string_util.dart';
 
 enum LoginType { email, phone }
 
-class User with UserUtils{
+class User with UserUtils {
   String email;
   String phone;
 
@@ -23,7 +22,7 @@ class User with UserUtils{
 
   factory User({String name, String phone, String email}) {
     if (name.isEmpty) throw Exception("User name is empty");
-    
+
     return User._(
         firstName: _getFirstName(name),
         lastName: _getLastName(name),
@@ -31,8 +30,10 @@ class User with UserUtils{
         email: email != null ? checkEmail(email) : '');
   }
 
-  static String _getLastName(String userName) => "".capitalize(userName.split(" ")[1]);
-  static String _getFirstName(String userName) => "".capitalize(userName.split(" ")[0]);
+  static String _getLastName(String userName) =>
+      "".capitalize(userName.split(" ")[1]);
+  static String _getFirstName(String userName) =>
+      "".capitalize(userName.split(" ")[0]);
 
   static String checkPhone(String phone) {
     String pattern = r"^(?:[+0])?[0-9]{11}";
@@ -48,14 +49,10 @@ class User with UserUtils{
   }
 
   static String checkEmail(String email) {
-    // String pattern = r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
-    // if (!RegExp(pattern).hasMatch(email)) throw Exception("Enter a valid email");
-    // return email;
-    bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(email);
-
-    if (!emailValid) throw Exception('Enter a valid email');
-
+    String pattern =
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+    if (!RegExp(pattern).hasMatch(email))
+      throw Exception("Enter a valid email");
     return email;
   }
 
@@ -64,7 +61,7 @@ class User with UserUtils{
   String get name => capitalize(_firstName) + " " + capitalize(_lastName);
 
   @override
-  bool operator == (Object object) {
+  bool operator ==(Object object) {
     if (object == null) {
       return false;
     }
@@ -77,11 +74,11 @@ class User with UserUtils{
     return false;
   }
 
-  void addFriends(Iterable<User> newFriend){
+  void addFriends(Iterable<User> newFriend) {
     friends.addAll(newFriend);
-  } 
+  }
 
-  void removeFriend(User user){
+  void removeFriend(User user) {
     friends.remove(user);
   }
 
@@ -94,7 +91,7 @@ class User with UserUtils{
   ''';
 
   @override
-  String toString(){
+  String toString() {
     return '''
     name: $name
     email: $email

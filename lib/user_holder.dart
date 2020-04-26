@@ -1,4 +1,4 @@
-import 'package:FlutterGalleryApp/models/user.dart';
+import 'models/user.dart';
 
 class UserHolder {
   Map<String, User> users = {};
@@ -18,27 +18,27 @@ class UserHolder {
   }
 
   User registerUserByEmail(String fullName, String email) {
-    //if (email.isEmpty) throw Exception('email is empty');
+    
     if (users.containsKey(email)) throw Exception('A user with this name already exists');
 
     User user = User(name: fullName, email: email);
     users[user.email] = user;
 
-    print(user.userInfo);
+   // print(user.userInfo);
     return user;
   }
 
   
 
   User registerUserByPhone(String fullName, String phone) {
-    if (phone.isEmpty) throw Exception('phone is empty');
+    //if (phone.isEmpty) throw Exception('phone is empty');
     String validPhone = User.checkPhone(phone);
 
     if (users.containsKey(phone)) throw Exception("A user with this phone already exists");
 
     User user = User(name: fullName, phone: validPhone);
     users[user.login] = user;
-    print(user.userInfo);
+    //print(user.userInfo);
     return user;
   }
 
