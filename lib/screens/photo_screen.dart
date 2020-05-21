@@ -7,19 +7,45 @@ import 'package:flutter/material.dart';
 
 //import 'package:FlutterGalleryApp/widgets/widgets.dart';
 //'https://i.pinimg.com/236x/bb/55/bb/bb55bbdac2bc9f6a8720b560e2e22424.jpg'
-class FullScreenImage extends StatelessWidget {
+class FullScreenImage extends StatefulWidget {
   String altDescription;
   String name;
   String userName;
   String photo;
+  String heroTag;
 
-  FullScreenImage({Key key, altDescription, name, userName, photo})
+  FullScreenImage({Key key, altDescription, name, userName, photo, heroTag})
       : super(key: key) {
+    this.heroTag = heroTag;
     this.altDescription = altDescription ?? 'description empty';
     this.name = name ?? 'name empty';
     this.userName = userName ?? 'nickName empty';
     this.photo = photo ??
         'https://pbs.twimg.com/profile_images/690927346883231744/x1AAbU9__400x400.jpg';
+  }
+  @override
+  State<StatefulWidget> createState() {
+    return _FullScreenImage();
+  }
+}
+
+class _FullScreenImage extends State<FullScreenImage>
+    with TickerProviderStateMixin {
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -39,39 +65,52 @@ class FullScreenImage extends StatelessWidget {
       body: Column(
         //crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Photo(photoLink: photo),
-          //widget description
+          Hero(
+            tag: widget.heroTag,
+            child: Photo(photoLink: widget.photo),
+          ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
             child: Text(
-              altDescription,
+              widget.altDescription,
               style: AppStyles.h3,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          Row(
-            children: <Widget>[
-              SizedBox(
-                width: 10,
-              ),
-              UserAvatar(
-                  'https://pbs.twimg.com/profile_images/690927346883231744/x1AAbU9__400x400.jpg'),
-              SizedBox(
-                width: 10,
-              ),
-              Column(
-                children: <Widget>[
-                  Text(name, style: AppStyles.h1Black),
-                  Text(
-                    '@' + userName,
-                    style: AppStyles.h5Black.copyWith(color: AppColors.manatee),
-                  )
-                ],
-                crossAxisAlignment: CrossAxisAlignment.start,
-              ),
-            ],
-          ),
+          AnimatedBuilder(
+              animation: _controller,
+              builder: (BuildContext context, Widget child) {
+                return Row(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Opacity(
+                      opacity: animationUserAvatar(),
+                      child: UserAvatar(
+                          'https://pbs.twimg.com/profile_images/690927346883231744/x1AAbU9__400x400.jpg'),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Opacity(
+                      opacity: animationUserName(),
+                      child: Column(
+                        children: <Widget>[
+                          Text(widget.name, style: AppStyles.h1Black),
+                          Text(
+                            '@' + widget.userName,
+                            style: AppStyles.h5Black
+                                .copyWith(color: AppColors.manatee),
+                          )
+                        ],
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                    )
+                  ],
+                );
+              }),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Row(children: <Widget>[
@@ -104,5 +143,19 @@ class FullScreenImage extends StatelessWidget {
       ),
       onTap: () {},
     );
+  }
+
+  double animationUserAvatar() {
+    return Tween<double>(begin: 0.0, end: 1.0)
+        .animate(CurvedAnimation(
+            parent: _controller, curve: Interval(0.0, 0.5, curve: Curves.ease)))
+        .value;
+  }
+
+  double animationUserName() {
+    return Tween<double>(begin: 0.0, end: 1.0)
+        .animate(CurvedAnimation(
+            parent: _controller, curve: Interval(0.5, 1.0, curve: Curves.ease)))
+        .value;
   }
 }

@@ -6,6 +6,7 @@ class Photo extends StatelessWidget {
   Photo({Key key, this.photoLink}) : super(key: key); 
 
   final String photoLink;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -13,8 +14,8 @@ class Photo extends StatelessWidget {
           horizontal: 10.0, 
           vertical: 5.0
           ),
-        child: 
-        ClipRRect(
+        
+        child:ClipRRect(
           borderRadius: BorderRadius.all(Radius.circular(17.0)),
           child: Container(
             color: AppColors.grayChateau,
