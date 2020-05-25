@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'screens/feed_screen.dart';
+import 'screens/home.dart';
 //import 'screens/photo_screen.dart';
 
 class MyApp extends StatelessWidget {
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Feed()//FullScreenImage()
+      home: Home()//Feed()//FullScreenImage()
     );
   }
 }

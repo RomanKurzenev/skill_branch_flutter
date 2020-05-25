@@ -148,14 +148,16 @@ class _FullScreenImage extends State<FullScreenImage>
   double animationUserAvatar() {
     return Tween<double>(begin: 0.0, end: 1.0)
         .animate(CurvedAnimation(
-            parent: _controller, curve: Interval(0.0, 0.5, curve: Curves.ease)))
+            parent: _controller, 
+            curve: Interval(0.0, 0.5, curve: Curves.ease)))
         .value;
   }
 
   double animationUserName() {
     return Tween<double>(begin: 0.0, end: 1.0)
         .animate(CurvedAnimation(
-            parent: _controller, curve: Interval(0.5, 1.0, curve: Curves.ease)))
+            parent: _controller, 
+            curve: Interval(0.5, 1.0, curve: Curves.ease)))
         .value;
   }
 }
