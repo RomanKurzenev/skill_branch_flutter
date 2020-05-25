@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 const String kGirl =
     'https://wallpapersmug.com/download/1920x1080/5955d5/barbara_palvin_supermodel_4k.jpg';
+const String kUserAvatar = "https://pbs.twimg.com/profile_images/690927346883231744/x1AAbU9__400x400.jpg";    
 const String kFlutterDash =
     'https://flutter.dev/assets/404/dash_nest-c64796b59b65042a2b40fae5764c13b7477a592db79eaf04c86298dcb75b78ea.png';
 
@@ -49,6 +50,7 @@ class _FeedState extends State<Feed> {
                             name: 'Sasha Gray',
                             userName: 'PandaJoey',
                             photo: kGirl,
+                            userPhoto: kUserAvatar,
                             altDescription:
                                 'An app bar consists of a toolbar and potentially other widgets, such as a TabBar and a FlexibleSpaceBar. App bars typically expose one or more common actions with IconButtons which are optionally followed by a PopupMenuButton for less common operations (sometimes called the "overflow menu").',
                           )));
@@ -79,7 +81,7 @@ class _FeedState extends State<Feed> {
           children: <Widget>[
             Row(children: <Widget>[
               UserAvatar(
-                  'https://pbs.twimg.com/profile_images/690927346883231744/x1AAbU9__400x400.jpg'),
+                  kUserAvatar),
               SizedBox(width: 6),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

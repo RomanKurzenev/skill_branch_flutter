@@ -12,9 +12,10 @@ class FullScreenImage extends StatefulWidget {
   String name;
   String userName;
   String photo;
+  String userPhoto;
   String heroTag;
 
-  FullScreenImage({Key key, altDescription, name, userName, photo, heroTag})
+  FullScreenImage({Key key, altDescription, name, userName, photo, userPhoto, heroTag})
       : super(key: key) {
     this.heroTag = heroTag;
     this.altDescription = altDescription ?? 'description empty';
@@ -22,6 +23,7 @@ class FullScreenImage extends StatefulWidget {
     this.userName = userName ?? 'nickName empty';
     this.photo = photo ??
         'https://pbs.twimg.com/profile_images/690927346883231744/x1AAbU9__400x400.jpg';
+    this.userPhoto = userPhoto ?? 'https://pbs.twimg.com/profile_images/690927346883231744/x1AAbU9__400x400.jpg';
   }
   @override
   State<StatefulWidget> createState() {
@@ -89,7 +91,7 @@ class _FullScreenImage extends State<FullScreenImage>
                     Opacity(
                       opacity: animationUserAvatar(),
                       child: UserAvatar(
-                          'https://pbs.twimg.com/profile_images/690927346883231744/x1AAbU9__400x400.jpg'),
+                          widget.userPhoto),
                     ),
                     SizedBox(
                       width: 10,
