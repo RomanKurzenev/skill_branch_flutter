@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 const String kGirl =
     'https://wallpapersmug.com/download/1920x1080/5955d5/barbara_palvin_supermodel_4k.jpg';
-const String kUserAvatar = "https://pbs.twimg.com/profile_images/690927346883231744/x1AAbU9__400x400.jpg";    
+const String kUserAvatar =
+    "https://pbs.twimg.com/profile_images/690927346883231744/x1AAbU9__400x400.jpg";
 const String kFlutterDash =
     'https://flutter.dev/assets/404/dash_nest-c64796b59b65042a2b40fae5764c13b7477a592db79eaf04c86298dcb75b78ea.png';
 
@@ -42,18 +43,33 @@ class _FeedState extends State<Feed> {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => FullScreenImage(
-                            heroTag: 'photo_$index',
-                            name: 'Sasha Gray',
-                            userName: 'PandaJoey',
-                            photo: kGirl,
-                            userPhoto: kUserAvatar,
-                            altDescription:
-                                'An app bar consists of a toolbar and potentially other widgets, such as a TabBar and a FlexibleSpaceBar. App bars typically expose one or more common actions with IconButtons which are optionally followed by a PopupMenuButton for less common operations (sometimes called the "overflow menu").',
-                          )));
+              Navigator.pushNamed(
+                context,
+                '/fullScreenImage',
+                arguments: FullScreenImageArguments(
+                  routeSettings: RouteSettings(
+                    arguments: 'Some title',
+                  ),
+                  heroTag: 'photo_$index',
+                  name: 'Sasha Gray',
+                  userName: 'PandaJoey',
+                  photo: kGirl,
+                  userPhoto: kUserAvatar,
+                  altDescription:
+                      'An app bar consists of a toolbar and potentially other widgets, such as a TabBar and a FlexibleSpaceBar. App bars typically expose one or more common actions with IconButtons which are optionally followed by a PopupMenuButton for less common operations (sometimes called the "overflow menu").',
+                ),
+                //   Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: (BuildContext context) => FullScreenImage(
+                //                 heroTag: 'photo_$index',
+                //                 name: 'Sasha Gray',
+                //                 userName: 'PandaJoey',
+                //                 photo: kGirl,
+                //                 userPhoto: kUserAvatar,
+                //                 altDescription:
+                //                     'An app bar consists of a toolbar and potentially other widgets, such as a TabBar and a FlexibleSpaceBar. App bars typically expose one or more common actions with IconButtons which are optionally followed by a PopupMenuButton for less common operations (sometimes called the "overflow menu").',
+              );
             },
             child: Hero(
               tag: 'photo_$index',
@@ -67,7 +83,7 @@ class _FeedState extends State<Feed> {
               'This is Flutter Dash. I love him :)',
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: AppStyles.h3,
+              style: Theme.of(context).textTheme.headline3, //AppStyles.h3
             ),
           )
         ]);
@@ -80,17 +96,16 @@ class _FeedState extends State<Feed> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Row(children: <Widget>[
-              UserAvatar(
-                  kUserAvatar),
+              UserAvatar(kUserAvatar),
               SizedBox(width: 6),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('Sasha Gray', style: AppStyles.h2Black),
+                  Text('Sasha Gray', style: Theme.of(context).textTheme.headline2 ),//AppStyles.h2Black
                   Text('@SGray',
                       style:
-                          AppStyles.h5Black.copyWith(color: AppColors.manatee))
+                          Theme.of(context).textTheme.headline5.copyWith(color: AppColors.manatee)) //AppStyles.h5Black
                 ],
               )
             ]),

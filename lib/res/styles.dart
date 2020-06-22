@@ -1,8 +1,21 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
 
 class AppStyles {
+
+  static TextTheme buildAppTextTheme(){
+    return  TextTheme(
+         headline1: h1Black,
+         headline2: h2Black,
+         headline3: h3,
+         headline4: h4,
+         headline5: h5Black,
+         headline6: h6
+      );
+  }
+
   static const h6 = TextStyle(
     fontSize: 12,
     height: 20 / 12,
