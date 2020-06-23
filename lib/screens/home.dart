@@ -7,7 +7,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'demo_screen.dart';
+
 
 class Home extends StatefulWidget {
   @override
@@ -81,17 +81,17 @@ class _HomeState extends State<Home> {
         borderRadius: 8,
         curve: Curves.ease,
         itemSelected: (int index) async {
-           if (index == 1) {
-             var value = await Navigator.push(
-               context,
-               MaterialPageRoute(builder: (context) => DemoScreen()),
-             );
-             print(value);
-           } else {
+          //  if (index == 1) {
+          //    var value = await Navigator.push(
+          //      context,
+          //      MaterialPageRoute(builder: (context) => DemoScreen()),
+          //    );
+          //    print(value);
+          //  } else {
             setState(() {
               currenTab = index;
             });
-          }
+          //}
         },
         currentTab: currenTab,
         items: [
