@@ -18,10 +18,24 @@ class MyApp extends StatelessWidget {
           textTheme: buildAppTextTheme(),
         ),
         home: Home(), //Feed()//FullScreenImage()
-        onGenerateRoute: (RouteSettings setting) {
-          if (setting.name == '/fullScreenImage') {
+        onUnknownRoute: (RouteSettings settings){
+          return MaterialPageRoute(builder: (BuildContext context){
+            return Scaffold(
+              body: Center(
+                child: Column(
+                  children: <Widget>[
+                    Text('404'),
+                    Text('Page not found'),
+                  ],
+                ),
+              ),
+            );
+          });
+        },
+        onGenerateRoute: (RouteSettings settings) {
+          if (settings.name == '/fullScreenImage') {
             FullScreenImageArguments args =
-                (setting.arguments as FullScreenImageArguments);
+                (settings.arguments as FullScreenImageArguments);
             final route = FullScreenImage(
               photo: args.photo,
               altDescription: args.altDescription,

@@ -51,7 +51,7 @@ class _FeedState extends State<Feed> {
                     arguments: 'Some title',
                   ),
                   heroTag: 'photo_$index',
-                  name: 'Sasha Gray',
+                  name: 'Roman Kurzenev',
                   userName: 'PandaJoey',
                   photo: kGirl,
                   userPhoto: kUserAvatar,
@@ -102,8 +102,8 @@ class _FeedState extends State<Feed> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text('Sasha Gray', style: Theme.of(context).textTheme.headline2 ),//AppStyles.h2Black
-                  Text('@SGray',
+                  Text('Roman Kurzenev', style: Theme.of(context).textTheme.headline2 ),//AppStyles.h2Black
+                  Text('@PandaJoey',
                       style:
                           Theme.of(context).textTheme.headline5.copyWith(color: AppColors.manatee)) //AppStyles.h5Black
                 ],

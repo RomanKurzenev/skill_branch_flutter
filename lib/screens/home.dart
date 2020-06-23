@@ -7,24 +7,40 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
-
 class Home extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  State<StatefulWidget> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
-  
-  
+class _HomeState extends State<Home> with TickerProviderStateMixin {
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<ConnectivityResult> _connectivitySubscription;
-
+  final PageStorageBucket bucket = PageStorageBucket();
   int currenTab = 0;
   List<Widget> pages = [
-    Feed(),
+    Feed(key: PageStorageKey('FeedPage')),
     Container(),
     Container(),
+  ];
+  final List<BottomNavyBarItem> _tabs = [
+    BottomNavyBarItem(
+      asset: AppIcons.home,
+      title: Text('Feed'),
+      activeColor: AppColors.dodgerBlue,
+      inactiveColor: AppColors.manatee,
+    ),
+    BottomNavyBarItem(
+      asset: AppIcons.home,
+      title: Text('Search'),
+      activeColor: AppColors.dodgerBlue,
+      inactiveColor: AppColors.manatee,
+    ),
+    BottomNavyBarItem(
+      asset: AppIcons.home,
+      title: Text('User'),
+      activeColor: AppColors.dodgerBlue,
+      inactiveColor: AppColors.manatee,
+    ),
   ];
 
   @override
@@ -43,7 +59,7 @@ class _HomeState extends State<Home> {
 
   Future<void> initConnectivity() async {
     ConnectivityResult result;
-    // Platform messages may fail, so we use a try/catch PlatformException.
+
     try {
       result = await _connectivity.checkConnectivity();
     } on PlatformException catch (e) {
@@ -57,7 +73,6 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-
     if (result != ConnectivityResult.mobile &&
         result != ConnectivityResult.wifi) {
       setState(() {
@@ -66,20 +81,21 @@ class _HomeState extends State<Home> {
     }
     if (result == ConnectivityResult.mobile ||
         result == ConnectivityResult.wifi) {
-        setState(() {
-          ConnectivityOverlay._instance.removeOverlay();    
-        });  
-      
+      setState(() {
+        ConnectivityOverlay._instance.removeOverlay();
+      });
     }
-   
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavyBar(
+        showElevation: true,
         borderRadius: 8,
         curve: Curves.ease,
+        items: _tabs,
+        currentTab: currenTab,
         itemSelected: (int index) async {
           //  if (index == 1) {
           //    var value = await Navigator.push(
@@ -88,34 +104,16 @@ class _HomeState extends State<Home> {
           //    );
           //    print(value);
           //  } else {
-            setState(() {
-              currenTab = index;
-            });
+          setState(() {
+            currenTab = index;
+          });
           //}
         },
-        currentTab: currenTab,
-        items: [
-          BottomNavyBarItem(
-            asset: AppIcons.home,
-            title: Text('Feed'),
-            activeColor: AppColors.dodgerBlue,
-            inactiveColor: AppColors.manatee,
-          ),
-          BottomNavyBarItem(
-            asset: AppIcons.home,
-            title: Text('Search'),
-            activeColor: AppColors.dodgerBlue,
-            inactiveColor: AppColors.manatee,
-          ),
-          BottomNavyBarItem(
-            asset: AppIcons.home,
-            title: Text('User'),
-            activeColor: AppColors.dodgerBlue,
-            inactiveColor: AppColors.manatee,
-          ),
-        ],
       ),
-      body: pages[currenTab],
+      body: PageStorage(
+        bucket: bucket,
+        child: pages[currenTab],
+      ),
     );
   }
 }
@@ -148,10 +146,14 @@ class BottomNavyBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bgColor = (backgroundColor == null) ? Theme.of(context).bottomAppBarColor : backgroundColor;
     return Container(
-      decoration: BoxDecoration(color: backgroundColor, boxShadow: [
+      decoration: BoxDecoration(color: bgColor, boxShadow: [
         if (showElevation)
-          const BoxShadow(color: Colors.black12, blurRadius: 2),
+          const BoxShadow(
+            color: Colors.black12,
+            blurRadius: 2,
+          ),
       ]),
       child: SafeArea(
         child: Container(
@@ -170,7 +172,7 @@ class BottomNavyBar extends StatelessWidget {
                 onTap: () => itemSelected(index),
                 child: _ItemWidget(
                   item: item,
-                  isSelected: currentTab == index,
+                  isSelected: currentTab == index ? true : false,
                   backgroundColor: backgroundColor,
                   animationDuration: duration,
                   borderRadius: borderRadius,
@@ -271,7 +273,6 @@ class BottomNavyBarItem {
 }
 
 class ConnectivityOverlay {
-  
   static OverlayEntry overlayEntry;
   static final ConnectivityOverlay _instance = ConnectivityOverlay._internal();
   factory ConnectivityOverlay() {
@@ -281,37 +282,37 @@ class ConnectivityOverlay {
   ConnectivityOverlay._internal();
 
   void showOverlay(BuildContext context) {
-    if(overlayEntry == null){
-    overlayEntry = OverlayEntry(builder: (BuildContext context) {
-      return Positioned(
-        top: MediaQuery.of(context).viewInsets.top + 75,
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            alignment: Alignment.center,
-            width: MediaQuery.of(context).size.width,
+    if (overlayEntry == null) {
+      overlayEntry = OverlayEntry(builder: (BuildContext context) {
+        return Positioned(
+          top: MediaQuery.of(context).viewInsets.top + 75,
+          child: Material(
+            color: Colors.transparent,
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
-              decoration: BoxDecoration(
-                  color: AppColors.mercury,
-                  borderRadius: BorderRadius.circular(12)),
-              child: Text('No internet connection'),
+              alignment: Alignment.center,
+              width: MediaQuery.of(context).size.width,
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
+                decoration: BoxDecoration(
+                    color: AppColors.mercury,
+                    borderRadius: BorderRadius.circular(12)),
+                child: Text('No internet connection'),
+              ),
             ),
           ),
-        ),
-      );
-    });}
+        );
+      });
+    }
     OverlayState overlayState = Overlay.of(context);
     overlayState.insert(overlayEntry);
     //await Future.delayed(Duration(seconds: 10));
     //overlayEntry.remove();
-    
   }
 
   void removeOverlay() {
-    if(overlayEntry != null){
-    overlayEntry.remove();
+    if (overlayEntry != null) {
+      overlayEntry.remove();
     }
   }
 }
