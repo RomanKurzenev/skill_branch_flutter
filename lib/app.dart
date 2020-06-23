@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
-          textTheme: AppStyles.buildAppTextTheme(),
+          textTheme: buildAppTextTheme(),
         ),
         home: Home(), //Feed()//FullScreenImage()
         onGenerateRoute: (RouteSettings setting) {
