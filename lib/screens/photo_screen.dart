@@ -235,7 +235,7 @@ class _FullScreenImage extends State<FullScreenImage>
             padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
             child: Text(
               text,
-              style: TextStyle(color: Colors.white, fontSize: 18),
+              style: TextStyle(color: Colors.white, fontSize: 18,),
             ),
           ),
         ),

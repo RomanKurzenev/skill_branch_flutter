@@ -1,20 +1,25 @@
 import 'dart:async';
 
+import 'package:FlutterGalleryApp/main.dart';
 import 'package:FlutterGalleryApp/res/res.dart';
 
 import 'package:FlutterGalleryApp/screens/feed_screen.dart';
 import 'package:connectivity/connectivity.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class Home extends StatefulWidget {
+  Home(this.onConnectivityChanged);
+  final Stream<ConnectivityResult> onConnectivityChanged;
   @override
-  State<StatefulWidget> createState() => _HomeState();
+  State createState() {
+    return _HomeState();
+  }
 }
 
+ConnectivityOverlay connectivityOverlay = ConnectivityOverlay();
+
 class _HomeState extends State<Home> with TickerProviderStateMixin {
-  final Connectivity _connectivity = Connectivity();
-  StreamSubscription<ConnectivityResult> _connectivitySubscription;
   final PageStorageBucket bucket = PageStorageBucket();
   int currenTab = 0;
   List<Widget> pages = [
@@ -43,48 +48,34 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     ),
   ];
 
+  StreamSubscription subscription;
+
   @override
   void initState() {
     super.initState();
-    initConnectivity();
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    subscription =
+        widget.onConnectivityChanged.listen((ConnectivityResult result) {
+      switch (result) {
+        case ConnectivityResult.wifi:
+// Вызовете удаление Overlay тут
+              connectivityOverlay.removeOverlay(context);
+          break;
+        case ConnectivityResult.mobile:
+// Вызовете удаление Overlay тут
+             connectivityOverlay.removeOverlay(context);
+          break;
+        case ConnectivityResult.none:
+// Вызовете отображения Overlay тут
+             connectivityOverlay.showOverlay(context, Text('No internet connection'));
+          break;
+      }
+    });
   }
 
   @override
   void dispose() {
-    _connectivitySubscription.cancel();
+    subscription.cancel();
     super.dispose();
-  }
-
-  Future<void> initConnectivity() async {
-    ConnectivityResult result;
-
-    try {
-      result = await _connectivity.checkConnectivity();
-    } on PlatformException catch (e) {
-      print(e.toString());
-    }
-    if (!mounted) {
-      return Future.value(null);
-    }
-
-    return _updateConnectionStatus(result);
-  }
-
-  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-    if (result != ConnectivityResult.mobile &&
-        result != ConnectivityResult.wifi) {
-      setState(() {
-        ConnectivityOverlay._instance.showOverlay(context);
-      });
-    }
-    if (result == ConnectivityResult.mobile ||
-        result == ConnectivityResult.wifi) {
-      setState(() {
-        ConnectivityOverlay._instance.removeOverlay();
-      });
-    }
   }
 
   @override
@@ -146,7 +137,9 @@ class BottomNavyBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = (backgroundColor == null) ? Theme.of(context).bottomAppBarColor : backgroundColor;
+    final bgColor = (backgroundColor == null)
+        ? Theme.of(context).bottomAppBarColor
+        : backgroundColor;
     return Container(
       decoration: BoxDecoration(color: bgColor, boxShadow: [
         if (showElevation)
@@ -270,49 +263,4 @@ class BottomNavyBarItem {
   final Color activeColor;
   final Color inactiveColor;
   final TextAlign textAlign;
-}
-
-class ConnectivityOverlay {
-  static OverlayEntry overlayEntry;
-  static final ConnectivityOverlay _instance = ConnectivityOverlay._internal();
-  factory ConnectivityOverlay() {
-    return _instance;
-  }
-
-  ConnectivityOverlay._internal();
-
-  void showOverlay(BuildContext context) {
-    if (overlayEntry == null) {
-      overlayEntry = OverlayEntry(builder: (BuildContext context) {
-        return Positioned(
-          top: MediaQuery.of(context).viewInsets.top + 75,
-          child: Material(
-            color: Colors.transparent,
-            child: Container(
-              alignment: Alignment.center,
-              width: MediaQuery.of(context).size.width,
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
-                decoration: BoxDecoration(
-                    color: AppColors.mercury,
-                    borderRadius: BorderRadius.circular(12)),
-                child: Text('No internet connection'),
-              ),
-            ),
-          ),
-        );
-      });
-    }
-    OverlayState overlayState = Overlay.of(context);
-    overlayState.insert(overlayEntry);
-    //await Future.delayed(Duration(seconds: 10));
-    //overlayEntry.remove();
-  }
-
-  void removeOverlay() {
-    if (overlayEntry != null) {
-      overlayEntry.remove();
-    }
-  }
 }

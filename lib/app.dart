@@ -1,14 +1,14 @@
-import 'dart:io';
 
+import 'dart:io';
 import 'package:FlutterGalleryApp/res/res.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'screens/home.dart';
 import 'screens/photo_screen.dart';
 
 class MyApp extends StatelessWidget {
-  @override
+    @override
   Widget build(BuildContext context) {
     return MaterialApp(
         //debugShowCheckedModeBanner: false,
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           textTheme: buildAppTextTheme(),
         ),
-        home: Home(), //Feed()//FullScreenImage()
+        home: Home(Connectivity().onConnectivityChanged), //Feed()//FullScreenImage()
         onUnknownRoute: (RouteSettings settings){
           return MaterialPageRoute(builder: (BuildContext context){
             return Scaffold(
@@ -55,3 +55,4 @@ class MyApp extends StatelessWidget {
         });
   }
 }
+
